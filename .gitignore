@@ -1,4 +1,9 @@
-
+#Required data, but ignored due to the file size
+data_instances_over_time.json
+instances_position.json
+instances_topics.json
+mastodon_first_snapshot_anonim.csv
+mastodon_growth_from_1_16_to_3_16_anonim.csv
 
 
 

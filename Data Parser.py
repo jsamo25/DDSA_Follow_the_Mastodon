@@ -3,7 +3,8 @@ import pandas as pd
 import simplejson as json
 
 """
-The dataset is made up by five files: 
+The dataset is made up by five files:
+
 mastodon_first_snapshot_anonim.csv 
 mastodon_growth_from_1_16_to_3_16_anonim.csv 
 instances_position.json 
@@ -30,34 +31,29 @@ source destination crawling time of the new link. It follows the format 'YYYY-MM
 """
 
 """ Load the Network """
-
 mastodon_digraph = nx.read_edgelist("mastodon_first_snapshot_anonim.csv", create_using= nx.DiGraph(),delimiter=",")
 
-#To load the temporal annotated links...
+#To load the temporal annotated links:
 with open("mastodon_growth_from_1_16_to_3_16_anonim.csv","r") as f:
     for line in f:
         source, destination, date = line.strip().split(",")
         mastodon_digraph.add_edge(source,destination,timestamp=date)
 
 """ Instance meta-data"""
-
 """
 instances_position.json contains the location of the instances. 
-From the JSON file we can create a Pandas DataFrame (table):
-"""
+From the JSON file we can create a Pandas DataFrame (table).
 
-instances_location = pd.read_json("instances_position.json")
-print(instances_location.head())
-
-"""
 The index of the DataFrame is the name of the instance. 
 The column 'CountryCode' indicates the ISO 3166-1 alpha-3 6 code of the country hosting the server, 
 while the column 'Location' reports the information returned by the geo-lookup service 'freegeoip.net'
 """
+instances_location = pd.read_json("instances_position.json")
+print(instances_location.head())
 
-instances_info = pd.read_json("data_instances_over_time.json")
-print(instances_info)
 """
+data_instances_over_time.json
+
 The index of the DataFrame is the day we collected data about the instances. 
 Each instance corresponds to a column, and we add four columns:
 
@@ -68,3 +64,13 @@ Each instance corresponds to a column, and we add four columns:
 in a specific day is characterized by a Python dictionary storing information about 
 the number of users, connections to other instances and number of posts
 """
+instances_info = pd.read_json("data_instances_over_time.json")
+print(instances_info)
+
+"""
+instances_topics.json contains the topics associated to each instance. 
+The file reports a JSON-object whose keys are the instances and the values are the topics. 
+To load the json file into a Python dictionary:
+"""
+instance2topics = json.load(open("instances_topics.json","r"))
+print(instance2topics)

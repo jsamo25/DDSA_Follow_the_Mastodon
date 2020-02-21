@@ -88,10 +88,14 @@ instance2topics = json.load(open("instances_topics.json","r"))
 #print(instance2topics)
 
 """                     Network Analysis Directed          """
-# node_connectivity = approx.node_connectivity(mastodon_digraph)
-# print("Node connectivity: ", node_connectivity)
+node_connectivity = approx.node_connectivity(mastodon_digraph)
+print("Node connectivity: ", node_connectivity)
 
-"""                     Network Analysis Undirected       """
+"""                     Network Analysis Undirected        """
 mastodon_undirected = mastodon_digraph.to_undirected()
+
 average_clustering = approx.average_clustering(mastodon_undirected)
 print ("Average Clustering: ", average_clustering)
+
+k_components = approx.k_components(mastodon_undirected)
+print ("K Components average: %s"%str(k_components))

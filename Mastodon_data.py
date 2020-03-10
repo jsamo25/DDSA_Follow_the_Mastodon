@@ -60,8 +60,10 @@ The column 'CountryCode' indicates the ISO 3166-1 alpha-3 6 code of the country 
 while the column 'Location' reports the information returned by the geo-lookup service 'freegeoip.net'
 """
 instances_location = pd.read_json("instances_position.json")
-# print("Instances position:\n")
-# print(instances_location.head())
+print("Instances position:\n")
+#print(instances_location.head())
+print(instances_location.keys())
+
 
 """
 data_instances_over_time.json
@@ -77,8 +79,8 @@ in a specific day is characterized by a Python dictionary storing information ab
 the number of users, connections to other instances and number of posts
 """
 instances_info = pd.read_json("data_instances_over_time.json")
-# print("Data instances over time\n")
-# print(instances_info)
+print("Data instances over time\n")
+print(instances_info)
 
 """
 instances_topics.json contains the topics associated to each instance. 
@@ -86,18 +88,30 @@ The file reports a JSON-object whose keys are the instances and the values are t
 To load the json file into a Python dictionary:
 """
 instance2topics = json.load(open("instances_topics.json","r"))
-# print("Instances topics\n")
-# print(instance2topics)
+print("Instances topics\n")
 
-"""                      Histogram of degree                 """
-# Histogram = nx.degree_histogram(mastodon_digraph)
-# plt.hist(Histogram)
-# plt.grid(True)
-# plt.show()
+for key, value in instance2topics.items():
+    print(key,value)
+"""                         Assortativity                    """
+r=nx.degree_pearson_correlation_coefficient(mastodon_digraph)
+print(r)
+
+"""                     Network Analysis Undirected          """
+mastodon_undirected = mastodon_digraph.to_undirected()
+
+average_node_degree = nx.average_degree_connectivity(mastodon_undirected)
+print ("average node degree", average_node_degree.keys())
+
+average_clustering = approx.average_clustering(mastodon_undirected)
+print("Average Clustering: ", average_clustering)
+
+node_connectivity = approx.node_connectivity(mastodon_undirected)
+print("Node connectivity: ", node_connectivity)
+
 
 """                   Max degree node + Ego Network          """
 
-# find node with largest degree
+#find node with largest degree
 node_and_degree = mastodon_digraph.degree()
 (largest_hub, degree) = sorted(node_and_degree, key=itemgetter(1))[-1]
 # Create ego graph of main hub
@@ -109,11 +123,8 @@ nx.draw(hub_ego, pos, node_color='b', node_size=50, with_labels=False)
 nx.draw_networkx_nodes(hub_ego, pos, nodelist=[largest_hub], node_size=300, node_color='r')
 plt.show()
 
-"""                     Network Analysis Undirected          """
-mastodon_undirected = mastodon_digraph.to_undirected()
-
-# average_clustering = approx.average_clustering(mastodon_undirected)
-# print("Average Clustering: ", average_clustering)
-#
-# node_connectivity = approx.node_connectivity(mastodon_undirected)
-# print("Node connectivity: ", node_connectivity)
+"""                      Histogram of degree                 """
+Histogram = nx.degree_histogram(mastodon_digraph)
+plt.hist(Histogram)
+plt.grid(True)
+plt.show()

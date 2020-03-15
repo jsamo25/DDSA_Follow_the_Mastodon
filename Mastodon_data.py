@@ -50,7 +50,6 @@ with open("mastodon_growth_from_1_16_to_3_16_anonim.csv","r") as f:
 
 """                     Instance meta-data                  """
 
-
 """
 instances_position.json contains the location of the instances. 
 From the JSON file we can create a Pandas DataFrame (table).
@@ -92,6 +91,7 @@ print("Instances topics\n")
 
 for key, value in instance2topics.items():
     print(key,value)
+
 """                         Assortativity                    """
 r=nx.degree_pearson_correlation_coefficient(mastodon_digraph)
 print(r)
